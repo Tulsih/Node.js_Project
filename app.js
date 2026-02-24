@@ -2,7 +2,6 @@ const express = require("express");
 const app = express();
 const PORT = 3000;
 const route = require("./src/routes/index");
-// const connectDB = require("./src/config/dbConfig");
 
 // const { connectDatabase } = require("./src/config/dbConfig");
 const connectDatabase = require("./src/config/dbConfig");

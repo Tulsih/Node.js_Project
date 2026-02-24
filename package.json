@@ -18,7 +18,9 @@
   "homepage": "https://github.com/Tulsih/Node.js_Project#readme",
   "description": "",
   "dependencies": {
+    "dotenv": "^17.3.1",
     "express": "^5.2.1",
-    "git": "^0.1.5"
+    "git": "^0.1.5",
+    "mongoose": "^9.2.2"
   }
 }

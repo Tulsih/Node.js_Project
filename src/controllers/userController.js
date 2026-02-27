@@ -1,14 +1,33 @@
 // controller req, res, exception
 // call service
 
+const MessageConstant = require("../constant/MessageConstant");
+const userService = require("../services/userService");
+
 class UserController {
+  //create user
+  async createUser(req, res, next) {
+    try {
+      const userData = req.body;
+      const newUser = await userService.createUser(userData);
+
+      return res.status(201).json({
+        message: MessageConstant.USER_CREATED,
+        data: newUser,
+      });
+    } catch (error) {
+      console.error("Error: ", error);
+      next(error);
+    }
+  }
+
   //get  all users
   async getAllUsers(req, res, next) {
     try {
       //   const users = await userService.getAllUsers();
 
       return res.status(200).json({
-        message: "get all users",
+        message: MessageConstant.USER_GET,
       });
     } catch (error) {
       console.error("Error :", error);
@@ -24,27 +43,10 @@ class UserController {
       //   const user = await userService.getUserbyId(id);
 
       return res.status(200).json({
-        message: "get single user by id",
+        message: MessageConstant.USER_GET_BY_ID,
       });
     } catch (error) {
       console.error("Error : ", error);
-      next(error);
-    }
-  }
-
-  //create user
-
-  async createUser(req, res, next) {
-    try {
-      const userData = req.body;
-      const newUser = await userService.createUser(userData);
-
-      return res.status(200).json({
-        message: "user created",
-        data: newUser,
-      });
-    } catch (error) {
-      console.error("Error: ", error);
       next(error);
     }
   }
@@ -59,7 +61,7 @@ class UserController {
       const updateUsers = await userService.updateUsers(id, updateData);
 
       return res.status(201).json({
-        message: "user updated",
+        message: MessageConstant.USER_UPDATE,
         data: updateUsers,
       });
     } catch (error) {
@@ -76,7 +78,7 @@ class UserController {
       await userService.deleteUsers(id);
 
       return res.status(200).json({
-        message: "user deleted",
+        message: MessageConstant.USER_DELETE,
       });
     } catch (error) {
       console.error("Error :", error);

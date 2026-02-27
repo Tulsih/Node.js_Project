@@ -1,37 +1,51 @@
 // CRUD Operation
+const MessageConstant = require("../constant/MessageConstant");
 const Users = require("../models/user");
 
-// create users
-const createUsers = async (userData) => {
-  return await Users.create(userData);
+//create users
+
+const createUser = async (userData) => {
+  const user = new Users(userData);
+  return await user.save();
+  //save user object into databse
+  //also writen like this
+  //return await Users.create(userData);
 };
 
-//read all users
+//get all users
 const getAllUsers = async () => {
   return await Users.find();
 };
 
-//read users by id
+//get users by id
 const getUserbyId = async (id) => {
   return await Users.findById(id);
 };
 
 //updated users
-const updateUsers = async (id, updateUsers) => {
-  return await Users.findByIdAndUpdate(
-    id,
-    updateUsers,
-    { new: true }, // return updated data
-  );
+const updateUsers = async (id, upadteData) => {
+  const updateUser = await Users.findByIdAndUpdate(id, upadteData, {
+    new: true,
+    runValidators: true, //run schema validation before update
+  });
+  if (!updateUser) {
+    throw new Error(MessageConstant.USER_NOT_FOUND);
+  }
+  return updateUser;
 };
 
-//delete users
+//deleted users
 const deleteUsers = async (id) => {
-  return await Users.findByIdAndDelete(id);
+  const deleteUsers = await Users.findByIdAndDelete(id);
+
+  if (!deleteUsers) {
+    throw new Error(MessageConstant.USER_NOT_FOUND);
+  }
+  return { message: MessageConstant.USER_DELETE };
 };
 
 module.exports = {
-  createUsers,
+  createUser,
   getAllUsers,
   getUserbyId,
   updateUsers,

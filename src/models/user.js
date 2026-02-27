@@ -26,7 +26,7 @@ const UserSchema = new mongoose.Schema(
     fullName: {
       type: String,
     },
-    initialLatter: {
+    initialLetter: {
       type: String,
       maxlength: 2,
       uppercase: true,
@@ -66,7 +66,7 @@ const UserSchema = new mongoose.Schema(
     zipcode: {
       type: Number,
     },
-    moblieNumber: {
+    mobileNumber: {
       type: Number,
       length: 10,
     },

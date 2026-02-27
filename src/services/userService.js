@@ -2,74 +2,132 @@
 // buiness logic [repository file access for CRUD]
 // res send to controller
 
+//first , create class , create user then validate data and svae users .1
+//validations
+const MessageConstant = require("../constant/MessageConstant");
 const User = require("../models/user");
+const {
+  createUser,
+  deleteUsers,
+  updateUsers,
+  getAllUsers,
+  getUserbyId,
+} = require("../repositories/userRepository");
+
 const nameRegex = /^[A-Za-z]+$/;
 const cityStateRegex = /^[A-Za-z\s]+$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
 const mobileRegex = /^[0-9]{10}$/;
 const zipcodeRegex = /^[0-9]{5,6}$/;
-//create user
-exports.createUser = async (data) => {
-  try {
+
+class UserService {
+  //create user
+  async createUser(data) {
+    try {
+      // validate data
+      vaidateData(data);
+
+      //save users
+      createUser(data);
+      return savedUser;
+    } catch (error) {
+      console.error("Error :", error);
+      throw error;
+    }
+  }
+  //get all users
+  async getAllUsers() {
+    return await getAllUsers();
+  }
+
+  // get users by id
+  async getUserbyId(id) {
+    const user = await getUserbyId(id);
+    if (!user) {
+      throw new Error(MessageConstant.USER_NOT_FOUND);
+    }
+    return user;
+  }
+  // updated users
+  async updateUsers(id, data) {
+    await validateData(data);
+    return await updateUsers(id, data);
+  }
+
+  //delete users
+  async deleteUsers(id) {
+    return await deleteUsers(id);
+  }
+
+  async vaidateData(data) {
+    //first check data is not null
+    if (!data || typeof data !== "object") {
+      throw new Error("filed the valid  data !");
+    }
     //name validations
-    if (!nameRegex.test(data.firstName))
+    if (!nameRegex.test(data?.firstName))
       throw new Error("First name must contain only alphabets");
 
-    if (!nameRegex.test(data.middleName))
+    if (!nameRegex.test(data?.middleName))
       throw new Error("middleName must contain only alphabets");
 
-    if (!nameRegex.test(data.lastName))
+    if (!nameRegex.test(data?.lastName))
       throw new Error("lastName must contain only alphabets");
 
     //email validation
-    if (!emailRegex.test(data.email)) throw new Error("invalid emil formate");
+    if (!emailRegex.test(data?.email)) throw new Error("invalid email formate");
+
+    //if email existed already
+    const existingEmail = await User.findOne({
+      where: { email: data?.email },
+    });
+
+    if (existingEmail) {
+      throw new Error("Email already exists");
+    }
 
     //password validation
-    if (!passwordRegex.test(data.password))
+    if (!passwordRegex.test(data?.password))
       throw new Error(
         "Password must contain uppercase, lowercase, number, special character and minimum 8 characters",
       );
 
     //age validation
-    if (data.age < 0) throw new Error("age cannot negative");
+    if (data?.age < 0) throw new Error("age cannot negative");
 
     //dateodbirth validation
-    const dob = new Date(data.dateOfBirth);
+    const dob = new Date(data?.dateOfBirth);
     if (dob > new Date()) throw new Error("Date of birth cannot be in future");
 
     //city validation
-    if (!cityStateRegex.test(data.city))
+    if (!cityStateRegex.test(data?.city))
       throw new Error("city must be in alpahbates only!");
 
     //state validatio
-    if (!cityStateRegex.test(data.this.state.first))
+    if (!cityStateRegex.test(data?.state))
       throw new Error("state must be in alpahbates only!");
 
     //zipcode validations
-    if (!zipcodeRegex.test(data.zipcode))
+    if (!zipcodeRegex.test(data?.zipcode))
       throw new Error("zipcode must be in 5 or 6 digites");
 
     //mobieNumber validations
-    if (!mobileRegex.test(data.moblieNumber))
-      throw new Error("10 digies are only valid");
+    if (!mobileRegex.test(data?.moblieNumber))
+      throw new Error("Enter Valid moblieNumber of 10 Digites");
 
     //anum validations
     const genders = ["MALE", "FEMALE"];
-    if (!genders.includes(data.gender)) throw new Error("Invalid gender value");
+    if (!genders.includes(data?.gender))
+      throw new Error("Invalid gender value");
 
     const userstatus = ["ACTIVE", "BLOCK", "INACTIVE"];
-    if (!userstatus.includes(data.status))
+    if (!userstatus.includes(data?.status))
       throw new Error("Invalid staus value");
 
     const userrole = ["ADMIN", "USER", "ANONYMOUSE"];
-    if (!userrole.includes(data.state)) throw new Error("Invalid role value");
-
-    //save users
-    const user = new User(data);
-    const savedUser = await user.save();
-    return savedUser;
-  } catch (error) {
-    throw new Error(error.message);
+    if (!userrole.includes(data?.role)) throw new Error("Invalid role value");
   }
-};
+}
+
+module.exports = new UserService();

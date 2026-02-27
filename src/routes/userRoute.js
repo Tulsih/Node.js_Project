@@ -7,9 +7,9 @@ const userController = require("../controllers/userController");
 
 //define routes
 
+route.post("/", userController.createUser);
 route.get("/list", userController.getAllUsers);
 route.get("/id", userController.getUserbyId);
-route.post("/", userController.createUser);
 route.put("/id", userController.updateUsers);
 route.delete("/id", userController.deleteUsers);
 

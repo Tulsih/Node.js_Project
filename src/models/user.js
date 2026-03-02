@@ -2,6 +2,7 @@
 //user schema
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const { string } = require("zod");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -67,8 +68,7 @@ const UserSchema = new mongoose.Schema(
       type: Number,
     },
     mobileNumber: {
-      type: Number,
-      length: 10,
+      type: string,
     },
     status: {
       type: String,
@@ -102,6 +102,5 @@ UserSchema.pre("save", async function (next) {
     const salt = await bcrypt.genSalt(10);
     this.password = await bcrypt.hash(this.password, salt);
   }
-  next();
 });
 module.exports = mongoose.model("Users", UserSchema);

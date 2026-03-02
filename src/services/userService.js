@@ -3,7 +3,7 @@
 // res send to controller
 
 //first , create class , create user then validate data and svae users .1
-//validations
+
 const MessageConstant = require("../constant/MessageConstant");
 const User = require("../models/user");
 const {
@@ -26,10 +26,10 @@ class UserService {
   async createUser(data) {
     try {
       // validate data
-      vaidateData(data);
+      this.validateData(data);
 
       //save users
-      createUser(data);
+      const savedUser = await createUser(data);
       return savedUser;
     } catch (error) {
       console.error("Error :", error);
@@ -51,7 +51,7 @@ class UserService {
   }
   // updated users
   async updateUsers(id, data) {
-    await validateData(data);
+    await this.validateData(data); //vaidateData
     return await updateUsers(id, data);
   }
 
@@ -60,7 +60,8 @@ class UserService {
     return await deleteUsers(id);
   }
 
-  async vaidateData(data) {
+  //valiadtions
+  async validateData(data) {
     //first check data is not null
     if (!data || typeof data !== "object") {
       throw new Error("filed the valid  data !");
@@ -84,7 +85,7 @@ class UserService {
     });
 
     if (existingEmail) {
-      throw new Error("Email already exists");
+      throw new Error(MessageConstant.EMAIL_EXISTING);
     }
 
     //password validation
@@ -96,7 +97,7 @@ class UserService {
     //age validation
     if (data?.age < 0) throw new Error("age cannot negative");
 
-    //dateodbirth validation
+    //dateofbirth validation
     const dob = new Date(data?.dateOfBirth);
     if (dob > new Date()) throw new Error("Date of birth cannot be in future");
 
@@ -112,8 +113,8 @@ class UserService {
     if (!zipcodeRegex.test(data?.zipcode))
       throw new Error("zipcode must be in 5 or 6 digites");
 
-    //mobieNumber validations
-    if (!mobileRegex.test(data?.moblieNumber))
+    //mobileNumber validations
+    if (!mobileRegex.test(data?.mobileNumber))
       throw new Error("Enter Valid moblieNumber of 10 Digites");
 
     //anum validations

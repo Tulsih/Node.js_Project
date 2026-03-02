@@ -5,5 +5,21 @@ const MessageConstant = {
   USER_GET_BY_ID: "get single users by id",
   USER_UPDATE: "user updated",
   USER_DELETE: "user deleted successfully",
+  FIRST_NAME: "First name must contain only alphabets",
+  MIddle_NAME: "middleName must contain only alphabets",
+  LAST_NAME: "lastName must contain only alphabets",
+  EMAIL: "Invalid email formate",
+  EMAIL_EXISTING: "Email already exists",
+  PASSWORD:
+    "Password must contain uppercase, lowercase, number, special character and minimum 8 characters",
+  AGE: "age cannot negative",
+  DATE_OF_BRITH: "Date of birth cannot be in future",
+  CITY: "city must be in alpahbates only!",
+  STATE: "state must be in alpahbates only!",
+  ZIPCODE: "zipcode must be in 5 or 6 digites",
+  MOBILE_NUMBER: "Enter Valid moblieNumber of 10 Digites",
+  GENDER: "Invalid gender value",
+  USERS_STATUS: "Invalid staus value",
+  USERS_ROLE: "Invalid role value",
 };
 module.exports = MessageConstant;

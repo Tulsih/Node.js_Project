@@ -3,7 +3,7 @@ const { object } = require("zod");
 const UserRoles = {
   ADMIN: "ADMIN",
   USER: "USER",
-  NONYMOUSE: "NONYMOUSE",
+  ANONYMOUS: "ANONYMOUS",
 };
 const listUserRoles = Object.keys(UserRoles);
 

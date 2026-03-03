@@ -2,7 +2,7 @@
 // call service
 
 const MessageConstant = require("../constant/MessageConstant");
-// const userService = require("../services/userService");
+const userService = require("../services/userService");
 const validate = require("../validation/index");
 const UserSchema = require("../validation/userValidation");
 const user = require("../models/user");
@@ -12,8 +12,10 @@ class UserController {
   async createUser(req, res) {
     try {
       //valiadtion
-      const validationResult = validate(UserSchema, req.body);
+      const validationResult = await validate(UserSchema, req.body);
+      console.log("validateREsult :", validationResult);
       if (!validationResult.success) {
+        console.log(validationResult.error);
         return res.status(400).json({
           success: false,
           message: "validation failed",
@@ -22,13 +24,14 @@ class UserController {
       }
       const userData = validationResult.data;
       //sace to database
-      const newUser = await user.createUser(userData);
+      const newUser = await user.create(userData);
       return res.status(201).json({
         success: true,
         message: MessageConstant.USER_CREATED,
         data: newUser,
       });
     } catch (error) {
+      console.log("error: ", error);
       return res.status(500).json({
         success: false,
         message: "server error",
@@ -84,18 +87,21 @@ class UserController {
   async updateUsers(req, res) {
     try {
       //valiadtion
-      const validationResult = validate(UserSchema, req.body);
+      const validationResult = await validate(UserSchema, req.body);
+      console.log("validateREsult :", validationResult);
       if (!validationResult.success) {
+        console.log(validationResult.error);
         return res.status(400).json({
           success: false,
-          message: "validation failed",
-          error: validationResult.error,
+          // code: validationResult.code,
+          // path: validationResult.path,
+          message: validationResult.message,
         });
       }
       const updateUsers = await user.findByIdAndUpdate(
         req.params.id,
         validationResult.data,
-        { new: true },
+        { new: true, runValidators: true },
       );
 
       if (!updateUsers) {
@@ -110,6 +116,7 @@ class UserController {
         data: updateUsers,
       });
     } catch (error) {
+      console.log("error", error);
       return res.status(500).json({
         success: false,
         message: "server error",

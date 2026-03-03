@@ -3,6 +3,7 @@ const MessageConstant = require("../constant/MessageConstant");
 const { listUserStatus } = require("../controllers/enum/UserStatus");
 const { listUserGender } = require("../controllers/enum/UserGender");
 const { listUserRoles } = require("../controllers/enum/UserRoles");
+const User = require("../models/user");
 
 const nameRegex = /^[A-Za-z]+$/;
 const cityStateRegex = /^[A-Za-z\s]+$/;
@@ -31,10 +32,11 @@ const user = z.object({
     .trim()
     .regex(nameRegex, MessageConstant.LAST_NAME),
 
-  initialLatter: z
-    .string()
-    .max(2)
-    .transform((val) => val.toUpperCase()),
+  // initialLatter: z
+  //   .string()
+  //   .max(2)
+  //   .optional()
+  //   .transform((val) => val.toUpperCase()),
 
   //email validations
   email: z
@@ -43,7 +45,7 @@ const user = z.object({
     .regex(emailRegex, MessageConstant.EMAIL)
     .refine(
       async (email) => {
-        const existinEmail = await user.findOne({
+        const existinEmail = await User.findOne({
           where: { email },
         });
         return !existinEmail; //must return true if valid
@@ -57,10 +59,10 @@ const user = z.object({
   password: z.string().min(8).regex(passwordRegex, MessageConstant.PASSWORD),
 
   //age validations
-  age: z.number().min(0, MessageConstant.AGE),
+  age: z.coerce.number().min(0, MessageConstant.AGE),
 
   //date of brith validation
-  dateOfBirth: z
+  dateOfBirth: z.coerce
     .date()
     .max(new Date(), { message: MessageConstant.DATE_OF_BRITH }),
 

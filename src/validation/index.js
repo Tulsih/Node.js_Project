@@ -1,14 +1,20 @@
-const validate = (schema, data) => {
+const user = require("./userValidation");
+
+const validate = async (schema, data) => {
   try {
-    const validateData = schema.parse(data);
+    const validateData = await schema.parseAsync(data);
     return {
       success: true,
       data: validateData,
     };
   } catch (error) {
+    const errorDetail = error.issues?.[0];
+    console.log("errorDetail: ", errorDetail);
     return {
       success: false,
-      error: error.errors,
+      // code: errorDetail.code,
+      message: errorDetail.message,
+      path: errorDetail.path,
     };
   }
 };

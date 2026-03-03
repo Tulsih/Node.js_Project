@@ -8,6 +8,7 @@ const validate = async (schema, data) => {
       data: validateData,
     };
   } catch (error) {
+    console.log("error", error);
     const errorDetail = error.issues?.[0];
     console.log("errorDetail: ", errorDetail);
     return {

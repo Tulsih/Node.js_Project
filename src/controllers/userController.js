@@ -2,7 +2,7 @@
 // call service
 
 const MessageConstant = require("../constant/MessageConstant");
-const userService = require("../services/userService");
+// const userService = require("../services/userService");
 const validate = require("../validation/index");
 const UserSchema = require("../validation/userValidation");
 const user = require("../models/user");
@@ -18,7 +18,7 @@ class UserController {
         console.log(validationResult.error);
         return res.status(400).json({
           success: false,
-          message: "validation failed",
+          message: MessageConstant.VAIDATION_FAILD,
           error: validationResult.error,
         });
       }
@@ -34,7 +34,7 @@ class UserController {
       console.log("error: ", error);
       return res.status(500).json({
         success: false,
-        message: "server error",
+        message: MessageConstant.SERVER_ERROR,
         error: error.message,
       });
     }
@@ -52,7 +52,7 @@ class UserController {
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: "server error",
+        message: MessageConstant.SERVER_ERROR,
         error: error.message,
       });
     }
@@ -76,7 +76,7 @@ class UserController {
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: "server error",
+        message: MessageConstant.SERVER_ERROR,
         error: error.message,
       });
     }
@@ -119,7 +119,7 @@ class UserController {
       console.log("error", error);
       return res.status(500).json({
         success: false,
-        message: "server error",
+        message: MessageConstant.SERVER_ERROR,
         error: error.message,
       });
     }
@@ -144,7 +144,7 @@ class UserController {
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: "server error",
+        message: MessageConstant.SERVER_ERROR,
         error: error.message,
       });
     }

@@ -1,8 +1,8 @@
 const z = require("zod");
 const MessageConstant = require("../constant/MessageConstant");
-const { listUserStatus } = require("../controllers/enum/UserStatus");
-const { listUserGender } = require("../controllers/enum/UserGender");
-const { listUserRoles } = require("../controllers/enum/UserRoles");
+const { listUserStatus } = require("../enum/UserStatus");
+const { listUserGender } = require("../enum/UserGender");
+const { listUserRoles } = require("../enum/UserRoles");
 const User = require("../models/user");
 const bcrypt = require("bcrypt");
 

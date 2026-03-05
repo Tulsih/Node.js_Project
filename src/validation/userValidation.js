@@ -42,7 +42,7 @@ const user = z
       .string()
       .min(1)
       .trim()
-      .regex(nameRegex, MessageConstant.MIddle_NAME_ONLY_ALPHABETS),
+      .regex(nameRegex, MessageConstant.MIDDLE_NAME_ONLY_ALPHABETS),
 
     lastName: z
       .string()
@@ -60,7 +60,7 @@ const user = z
           const existinEmail = await User.findOne({
             where: { email },
           });
-          return !existinEmail; //must return true if valid
+          return !existinEmail; //must return true if valid //esle validation failed
         },
         {
           message: MessageConstant.EMAIL_EXISTING,

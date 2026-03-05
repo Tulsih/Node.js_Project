@@ -1,7 +1,6 @@
 // defined model
 //user schema
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 const { string } = require("zod");
 
 const UserSchema = new mongoose.Schema(
@@ -32,7 +31,6 @@ const UserSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-
       unique: true,
       lowercase: true,
     },
@@ -79,7 +77,8 @@ const UserSchema = new mongoose.Schema(
   },
 );
 
-//hook are automatic functions that run before and after databse actions
+//hook are automatic functions that run before and after database actions
 //pre('save)
 UserSchema.pre("save", async function (next) {});
+
 module.exports = mongoose.model("Users", UserSchema);

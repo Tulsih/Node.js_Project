@@ -2,7 +2,6 @@
 // call service
 
 const MessageConstant = require("../constant/MessageConstant");
-// const userService = require("../services/userService");
 const validate = require("../validation/index");
 const UserSchema = require("../validation/userValidation");
 const user = require("../models/user");
@@ -93,8 +92,6 @@ class UserController {
         console.log(validationResult.error);
         return res.status(400).json({
           success: false,
-          // code: validationResult.code,
-          // path: validationResult.path,
           message: validationResult.message,
         });
       }

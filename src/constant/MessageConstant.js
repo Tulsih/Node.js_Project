@@ -6,7 +6,7 @@ const MessageConstant = {
   USER_UPDATE: "user updated",
   USER_DELETE: "user deleted successfully",
   FIRST_NAME_ONLY_ALPHABETS: "First name must contain only alphabets",
-  MIddle_NAME_ONLY_ALPHABETS: "middleName must contain only alphabets",
+  MIDDLE_NAME_ONLY_ALPHABETS: "middleName must contain only alphabets",
   LAST_NAME_ONLY_ALPHABETS: "lastName must contain only alphabets",
   INVALID_EMAIL_FORMATE: "Invalid email formate",
   EMAIL_EXISTING: "Email already exists",

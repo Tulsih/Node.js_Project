@@ -77,8 +77,4 @@ const UserSchema = new mongoose.Schema(
   },
 );
 
-//hook are automatic functions that run before and after database actions
-//pre('save)
-UserSchema.pre("save", async function (next) {});
-
 module.exports = mongoose.model("Users", UserSchema);

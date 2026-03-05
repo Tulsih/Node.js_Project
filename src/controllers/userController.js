@@ -2,87 +2,148 @@
 // call service
 
 const MessageConstant = require("../constant/MessageConstant");
-const userService = require("../services/userService");
+const validate = require("../validation/index");
+const UserSchema = require("../validation/userValidation");
+const user = require("../models/user");
 
 class UserController {
   //create user
-  async createUser(req, res, next) {
+  async createUser(req, res) {
     try {
-      const userData = req.body;
-      const newUser = await userService.createUser(userData);
-
+      //valiadtion
+      const validationResult = await validate(UserSchema, req.body);
+      console.log("validateREsult :", validationResult);
+      if (!validationResult.success) {
+        console.log(validationResult.error);
+        return res.status(400).json({
+          success: false,
+          message: MessageConstant.VAIDATION_FAILD,
+          error: validationResult.error,
+        });
+      }
+      const userData = validationResult.data;
+      //sace to database
+      const newUser = await user.create(userData);
       return res.status(201).json({
+        success: true,
         message: MessageConstant.USER_CREATED,
         data: newUser,
       });
     } catch (error) {
-      console.error("Error: ", error);
-      next(error);
+      console.log("error: ", error);
+      return res.status(500).json({
+        success: false,
+        message: MessageConstant.SERVER_ERROR,
+        error: error.message,
+      });
     }
   }
 
   //get  all users
-  async getAllUsers(req, res, next) {
+  async getAllUsers(req, res) {
     try {
-      //   const users = await userService.getAllUsers();
-
+      const users = await user.find();
       return res.status(200).json({
-        message: MessageConstant.USER_GET,
+        success: true,
+        count: users.length,
+        data: users,
       });
     } catch (error) {
-      console.error("Error :", error);
-      next(error);
+      return res.status(500).json({
+        success: false,
+        message: MessageConstant.SERVER_ERROR,
+        error: error.message,
+      });
     }
   }
 
   //get single user by id
 
-  async getUserbyId(req, res, next) {
+  async getUserbyId(req, res) {
     try {
-      const { id } = req.params;
-      //   const user = await userService.getUserbyId(id);
-
+      const users = await user.findById(req.params.id);
+      if (!users) {
+        return res.status(400).json({
+          success: false,
+          message: MessageConstant.USER_NOT_FOUND,
+        });
+      }
       return res.status(200).json({
-        message: MessageConstant.USER_GET_BY_ID,
+        success: true,
+        data: users,
       });
     } catch (error) {
-      console.error("Error : ", error);
-      next(error);
+      return res.status(500).json({
+        success: false,
+        message: MessageConstant.SERVER_ERROR,
+        error: error.message,
+      });
     }
   }
 
   //update the user
 
-  async updateUsers(req, res, next) {
+  async updateUsers(req, res) {
     try {
-      const { id } = req.params;
-      const updateData = req.body;
+      //valiadtion
+      const validationResult = await validate(UserSchema, req.body);
+      console.log("validateREsult :", validationResult);
+      if (!validationResult.success) {
+        console.log(validationResult.error);
+        return res.status(400).json({
+          success: false,
+          message: validationResult.message,
+        });
+      }
+      const updateUsers = await user.findByIdAndUpdate(
+        req.params.id,
+        validationResult.data,
+        { new: true, runValidators: true },
+      );
 
-      const updateUsers = await userService.updateUsers(id, updateData);
-
-      return res.status(201).json({
+      if (!updateUsers) {
+        return res.status(404).json({
+          success: false,
+          message: MessageConstant.USER_NOT_FOUND,
+        });
+      }
+      return res.status(200).json({
+        success: true,
         message: MessageConstant.USER_UPDATE,
         data: updateUsers,
       });
     } catch (error) {
-      console.error("Error : ", error);
-      next(error);
+      console.log("error", error);
+      return res.status(500).json({
+        success: false,
+        message: MessageConstant.SERVER_ERROR,
+        error: error.message,
+      });
     }
   }
 
   //delete users
 
-  async deleteUsers(req, res, next) {
+  async deleteUsers(req, res) {
     try {
-      const { id } = req.params;
-      await userService.deleteUsers(id);
-
+      const deleteuser = await user.findByIdAndDelete(req.params.id);
+      if (!deleteuser) {
+        return res.status(400).json({
+          success: false,
+          message: MessageConstant.USER_NOT_FOUND,
+          error: error.message,
+        });
+      }
       return res.status(200).json({
+        success: true,
         message: MessageConstant.USER_DELETE,
       });
     } catch (error) {
-      console.error("Error :", error);
-      next(error);
+      return res.status(500).json({
+        success: false,
+        message: MessageConstant.SERVER_ERROR,
+        error: error.message,
+      });
     }
   }
 }

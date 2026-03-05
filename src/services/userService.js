@@ -13,16 +13,19 @@ const {
   getAllUsers,
   getUserbyId,
 } = require("../repositories/userRepository");
+const validate = require("../validation/index");
+const userSchema = require("../validation/userValidation");
 
 class UserService {
   //create user
   async createUser(data) {
     try {
-      // validate data
-      this.validateData(data);
-
-      //save users
-      const savedUser = await createUser(data);
+      // zod validation
+      const valiadtion = await validate(userSchema, data);
+      if (!valiadtion.success) {
+        throw new Error(valiadtion.message);
+      }
+      const savedUser = await createUser(valiadtion.data);
       return savedUser;
     } catch (error) {
       console.error("Error :", error);
@@ -44,8 +47,12 @@ class UserService {
   }
   // updated users
   async updateUsers(id, data) {
-    await this.validateData(data); //vaidateData
-    return await updateUsers(id, data);
+    // zod vaidateData
+    const valiadtion = await validate(userSchema, data);
+    if (!valiadtion.success) {
+      throw new Error(valiadtion.message);
+    }
+    return await updateUsers(id, valiadtion.data);
   }
 
   //delete users

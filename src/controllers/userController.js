@@ -1,10 +1,10 @@
 // controller req, res, exception
 // call service
 
-const MessageConstant = require("../constant/MessageConstant");
 const validate = require("../validation/index");
 const UserSchema = require("../validation/userValidation");
 const user = require("../models/user");
+const response = require("../helper/generalResponse");
 
 class UserController {
   //create user
@@ -15,27 +15,18 @@ class UserController {
       console.log("validateREsult :", validationResult);
       if (!validationResult.success) {
         console.log(validationResult.error);
-        return res.status(400).json({
-          success: false,
-          message: MessageConstant.VAIDATION_FAILD,
-          error: validationResult.error,
-        });
+        return response.badRequestResponse(res);
       }
+
       const userData = validationResult.data;
+
       //sace to database
       const newUser = await user.create(userData);
-      return res.status(201).json({
-        success: true,
-        message: MessageConstant.USER_CREATED,
-        data: newUser,
-      });
+
+      return response.createdResponse(res, newUser);
     } catch (error) {
       console.log("error: ", error);
-      return res.status(500).json({
-        success: false,
-        message: MessageConstant.SERVER_ERROR,
-        error: error.message,
-      });
+      return response.InternalServerError(res, error?.message);
     }
   }
 
@@ -43,46 +34,28 @@ class UserController {
   async getAllUsers(req, res) {
     try {
       const users = await user.find();
-      return res.status(200).json({
-        success: true,
-        count: users.length,
-        data: users,
-      });
+      return response.getOkResponse(res, users);
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: MessageConstant.SERVER_ERROR,
-        error: error.message,
-      });
+      console.log("error: ", error);
+      return response.InternalServerError(res, error?.message);
     }
   }
 
   //get single user by id
-
   async getUserbyId(req, res) {
     try {
       const users = await user.findById(req.params.id);
       if (!users) {
-        return res.status(400).json({
-          success: false,
-          message: MessageConstant.USER_NOT_FOUND,
-        });
+        return response.badRequestResponse(res);
       }
-      return res.status(200).json({
-        success: true,
-        data: users,
-      });
+      return response.getOkResponse(res, users);
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: MessageConstant.SERVER_ERROR,
-        error: error.message,
-      });
+      console.log("error: ", error);
+      return response.InternalServerError(res, error?.message);
     }
   }
 
   //update the user
-
   async updateUsers(req, res) {
     try {
       //valiadtion
@@ -90,10 +63,7 @@ class UserController {
       console.log("validateREsult :", validationResult);
       if (!validationResult.success) {
         console.log(validationResult.error);
-        return res.status(400).json({
-          success: false,
-          message: validationResult.message,
-        });
+        return response.badRequestResponse(res);
       }
       const updateUsers = await user.findByIdAndUpdate(
         req.params.id,
@@ -102,48 +72,26 @@ class UserController {
       );
 
       if (!updateUsers) {
-        return res.status(404).json({
-          success: false,
-          message: MessageConstant.USER_NOT_FOUND,
-        });
+        return response.notFoundResponse(res);
       }
-      return res.status(200).json({
-        success: true,
-        message: MessageConstant.USER_UPDATE,
-        data: updateUsers,
-      });
+      return response.updatedResponse(res, updateUsers);
     } catch (error) {
-      console.log("error", error);
-      return res.status(500).json({
-        success: false,
-        message: MessageConstant.SERVER_ERROR,
-        error: error.message,
-      });
+      console.log("error: ", error);
+      return response.InternalServerError(res, error?.message);
     }
   }
 
   //delete users
-
   async deleteUsers(req, res) {
     try {
       const deleteuser = await user.findByIdAndDelete(req.params.id);
       if (!deleteuser) {
-        return res.status(400).json({
-          success: false,
-          message: MessageConstant.USER_NOT_FOUND,
-          error: error.message,
-        });
+        return response.notFoundResponse(res);
       }
-      return res.status(200).json({
-        success: true,
-        message: MessageConstant.USER_DELETE,
-      });
+      return response.deletedResponse(res, deleteuser);
     } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: MessageConstant.SERVER_ERROR,
-        error: error.message,
-      });
+      console.log("error: ", error);
+      return response.InternalServerError(res, error?.message);
     }
   }
 }

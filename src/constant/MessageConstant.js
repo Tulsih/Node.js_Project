@@ -26,7 +26,6 @@ const MessageConstant = {
 
   //ERROR MESSAGE
   ERROR: "ERROR",
-  INTERNAL_SERVER_ERROR: "Internal server error",
   UNAUTHORIZED_ERROR: "Unauthorized access",
   BAD_REQUEST_ERROR: "Bad Request",
   SUCCESS: "SUCCESS",

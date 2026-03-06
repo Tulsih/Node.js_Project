@@ -26,6 +26,10 @@ class UserController {
       return response.createdResponse(res, newUser);
     } catch (error) {
       console.log("error: ", error);
+      //email existed
+      if (error.code === 11000) {
+        return response.conflictResponse(res);
+      }
       return response.InternalServerError(res, error?.message);
     }
   }

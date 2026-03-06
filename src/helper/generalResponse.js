@@ -101,12 +101,18 @@ class GeneralResponse {
       description,
     );
   }
-
+  //409 Conflict Email already exists
+  static conflictResponse(res, description = MessageConstant.EMAIL_EXISTING) {
+    return new GeneralResponse(
+      res,
+      null,
+      409,
+      MessageConstant.ERROR,
+      description,
+    );
+  }
   //500 Internal Server Error
-  static InternalServerError(
-    res,
-    description = MessageConstant.INTERNAL_SERVER_ERROR,
-  ) {
+  static InternalServerError(res, description = MessageConstant.SERVER_ERROR) {
     return new GeneralResponse(
       res,
       null,

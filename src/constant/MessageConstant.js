@@ -22,6 +22,14 @@ const MessageConstant = {
   INVALID_USERS_STATUS: "Invalid staus value",
   INVALID_USERS_ROLE: "Invalid role value",
   VAIDATION_FAILD: "validation failed",
-  SERVER_ERROR: "server error",
+  SERVER_ERROR: " Internal server error",
+
+  //ERROR MESSAGE
+  ERROR: "ERROR",
+  INTERNAL_SERVER_ERROR: "Internal server error",
+  UNAUTHORIZED_ERROR: "Unauthorized access",
+  BAD_REQUEST_ERROR: "Bad Request",
+  SUCCESS: "SUCCESS",
+  OK_RESPONSE: "OK",
 };
 module.exports = MessageConstant;

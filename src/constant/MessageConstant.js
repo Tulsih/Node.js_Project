@@ -30,5 +30,7 @@ const MessageConstant = {
   BAD_REQUEST_ERROR: "Bad Request",
   SUCCESS: "SUCCESS",
   OK_RESPONSE: "OK",
+  INVALID_REQUEST: "Invalid request",
+  NOT_FOUND: "Not found",
 };
 module.exports = MessageConstant;

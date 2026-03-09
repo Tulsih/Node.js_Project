@@ -5,6 +5,10 @@
 //first , create class , create user then validate data and svae users .1
 
 const MessageConstant = require("../constant/MessageConstant");
+const {
+  InvalidRequestException,
+  NotFoundException,
+} = require("../exceptions/ApiError");
 const User = require("../models/user");
 const {
   createUser,
@@ -23,7 +27,7 @@ class UserService {
       // zod validation
       const valiadtion = await validate(userSchema, data);
       if (!valiadtion.success) {
-        throw new Error(valiadtion.message);
+        throw new InvalidRequestException(valiadtion.message);
       }
       const savedUser = await createUser(valiadtion.data);
       return savedUser;
@@ -41,7 +45,7 @@ class UserService {
   async getUserbyId(id) {
     const user = await getUserbyId(id);
     if (!user) {
-      throw new Error(MessageConstant.USER_NOT_FOUND);
+      throw new NotFoundException(MessageConstant.USER_NOT_FOUND);
     }
     return user;
   }
@@ -50,7 +54,7 @@ class UserService {
     // zod vaidateData
     const valiadtion = await validate(userSchema, data);
     if (!valiadtion.success) {
-      throw new Error(valiadtion.message);
+      throw new InvalidRequestException(valiadtion.message);
     }
     return await updateUsers(id, valiadtion.data);
   }

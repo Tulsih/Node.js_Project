@@ -1,3 +1,5 @@
+const MessageConstant = require("../constant/MessageConstant");
+
 //throw error
 class AppError extends Error {
   constructor(code, description) {
@@ -7,4 +9,19 @@ class AppError extends Error {
     this.status = "ERROR";
   }
 }
-module.exports = AppError;
+
+class InvalidRequestException extends AppError {
+  constructor(message = MessageConstant.INVALID_REQUEST) {
+    super(400, message);
+  }
+}
+
+class NotFoundException extends AppError {
+  constructor(message = MessageConstant.NOT_FOUND) {
+    super(404, message);
+  }
+}
+module.exports = {
+  InvalidRequestException,
+  NotFoundException,
+};

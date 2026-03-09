@@ -54,10 +54,10 @@ class GeneralResponse {
     );
   }
   //200 Deleted
-  static deletedResponse(res, data, description = MessageConstant.USER_DELETE) {
+  static deletedResponse(res, description = MessageConstant.USER_DELETE) {
     return new GeneralResponse(
       res,
-      data,
+      null,
       200,
       MessageConstant.SUCCESS,
       description,

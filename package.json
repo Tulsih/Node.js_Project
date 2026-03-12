@@ -23,6 +23,8 @@
     "express": "^5.2.1",
     "git": "^0.1.5",
     "mongoose": "^9.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
     "zed": "^0.1.0",
     "zod": "^4.3.6"
   }

@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true,
-      lowercase: true,
+      // lowercase: true,
     },
     password: {
       type: String,
@@ -70,6 +70,10 @@ const UserSchema = new mongoose.Schema(
     roles: {
       type: String,
       enum: ["ADMIN", "USER", "ANONYMOUSE"],
+    },
+    softDelete: {
+      type: Boolean,
+      default: false,
     },
   },
   {

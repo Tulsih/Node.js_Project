@@ -2,8 +2,6 @@
 // buiness logic [repository file access for CRUD]
 // res send to controller
 
-//first , create class , create user then validate data and svae users .1
-
 const MessageConstant = require("../constant/MessageConstant");
 const {
   InvalidRequestException,
@@ -16,6 +14,7 @@ const {
   updateUsers,
   getAllUsers,
   getUserbyId,
+  getUserbyEmail,
 } = require("../repositories/userRepository");
 const validate = require("../validation/index");
 const userSchema = require("../validation/userValidation");
@@ -29,7 +28,14 @@ class UserService {
       if (!valiadtion.success) {
         throw new InvalidRequestException(valiadtion.message);
       }
-      const savedUser = await createUser(valiadtion.data);
+
+      const validateData = valiadtion?.data || {};
+      const existsUser = await getUserbyEmail(validateData?.email);
+      if (existsUser) {
+        throw new InvalidRequestException(MessageConstant.USER_ALREADY_EXIST);
+      }
+
+      const savedUser = await createUser(validateData);
       return savedUser;
     } catch (error) {
       console.error("Error :", error);
@@ -49,13 +55,28 @@ class UserService {
     }
     return user;
   }
+
   // updated users
   async updateUsers(id, data) {
-    // zod vaidateData
-    const valiadtion = await validate(userSchema, data);
-    if (!valiadtion.success) {
-      throw new InvalidRequestException(valiadtion.message);
+    // fetch user by id
+    const existsUser = await getUserbyId(id);
+    if (!existsUser) {
+      throw new NotFoundException(MessageConstant.USER_NOT_FOUND);
     }
+    // data {fr,ln,mn,dob,pass}
+    // updatedReqData {fn}
+    // Merge existing data with new data
+    const updatedReqData = {
+      ...existsUser.toObject(),
+      ...data,
+    };
+    // validate
+    const valiadtion = await validate(userSchema, updatedReqData);
+    if (!valiadtion?.success) {
+      throw new InvalidRequestException(valiadtion?.message);
+    }
+    // update
+    //return response
     return await updateUsers(id, valiadtion.data);
   }
 

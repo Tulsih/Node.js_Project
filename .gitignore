@@ -1,4 +1,4 @@
-.node_Modules/
+.node_modules/
 .env
 packae-lock.json
 git

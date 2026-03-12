@@ -19,14 +19,18 @@ const capitalize = (value) => {
 };
 //age calulation function
 const calculateAge = (dob) => {
-  const today = new Date();
-  let age = today.getFullYear() - dob.getFullYear();
+  try {
+    const today = new Date();
+    let age = today.getFullYear() - dob.getFullYear();
 
-  const monthDiff = today.getMonth() - dob.getMonth();
-  if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
-    age--;
+    const monthDiff = today.getMonth() - dob.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < dob.getDate())) {
+      age--;
+    }
+    return age;
+  } catch (error) {
+    console.error("error: ", error);
   }
-  return age;
 };
 
 const user = z
@@ -54,18 +58,7 @@ const user = z
     email: z
       .string()
       .trim()
-      .regex(emailRegex, MessageConstant.INVALID_EMAIL_FORMATE)
-      .refine(
-        async (email) => {
-          const existinEmail = await User.findOne({
-            where: { email },
-          });
-          return !existinEmail; //must return true if valid //esle validation failed
-        },
-        {
-          message: MessageConstant.EMAIL_EXISTING,
-        },
-      ),
+      .regex(emailRegex, MessageConstant.INVALID_EMAIL_FORMATE),
 
     //password validations
     password: z
@@ -78,27 +71,17 @@ const user = z
         return hashedpassword;
       }),
 
-    //date of brith validatio // 18 years old at least (YYYY-MM-DD)
+    // date of brith validatio // 18 years old at least (YYYY-MM-DD)
     dateOfBirth: z.coerce
       .date()
-      .max(new Date(new Date().setFullYear(new Date().getFullYear() - 18)), {
-        //(3-3-2026 (max dob -3-3-2008)2008 above yres are not 18 years old)2008(2026-18))
-        message: MessageConstant.BOD_MUST_AT_LEAT_YEAR_OLD,
+      //check if the date is valied
+      .refine((dob) => !isNaN(dob.getTime()), {
+        message: MessageConstant.INVALID_DATE,
       })
-      .superRefine((dob, ctx) => {
-        const age = calculateAge(dob);
-
-        if (age < 18) {
-          ctx.addIssue({
-            code: z.ZodIssueCode.custom,
-            message: MessageConstant.DATE_OF_BRITH,
-            path: ["dateOfBirth"],
-          });
-        }
+      //check age
+      .refine((dob) => calculateAge(dob) >= 18, {
+        message: MessageConstant.DOB_MUST_AT_LEAT_YEAR_OLD,
       }),
-    //age validations
-    // curent datd - dob = aeg  , not show in input value direct stored in backend
-
     //city validation
     city: z
       .string()
@@ -116,7 +99,7 @@ const user = z
       .regex(cityStateRegex, MessageConstant.STATE_ONLY_ALPHABETS),
 
     //zpicode valiadtion
-    zipcode: z
+    zipcode: z.coerce
       .string()
       .trim()
       .regex(zipcodeRegex, MessageConstant.ZIPCODE_ONLY_DIGITES),

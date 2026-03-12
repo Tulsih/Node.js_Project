@@ -21,7 +21,14 @@ class NotFoundException extends AppError {
     super(404, message);
   }
 }
+
+class AlredayExistsException extends AppError {
+  constructor(message = MessageConstant.ALREADY_EXIST) {
+    super(409, message);
+  }
+}
 module.exports = {
   InvalidRequestException,
   NotFoundException,
+  AlredayExistsException,
 };

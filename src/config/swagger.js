@@ -1,0 +1,17 @@
+const swaggerJsdoc = require("swagger-jsdoc");
+
+const options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "Node.js API",
+      version: "1.0.0",
+      description: "API documentation using Swagger",
+    },
+  },
+  apis: ["./src/api-docs/*.yaml"], // swagger routes file
+};
+
+const swaggerSpec = swaggerJsdoc(options);
+// console.log(swaggerSpec);
+module.exports = swaggerSpec;

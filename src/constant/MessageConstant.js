@@ -5,6 +5,7 @@ const MessageConstant = {
   USER_GET_BY_ID: "get single users by id",
   USER_UPDATE: "user updated",
   USER_DELETE: "user deleted successfully",
+  USER_ALREADY_EXIST: "User already exists",
   FIRST_NAME_ONLY_ALPHABETS: "First name must contain only alphabets",
   MIDDLE_NAME_ONLY_ALPHABETS: "middleName must contain only alphabets",
   LAST_NAME_ONLY_ALPHABETS: "lastName must contain only alphabets",
@@ -13,7 +14,8 @@ const MessageConstant = {
   PASSWORD_ERROR:
     "Password must contain uppercase, lowercase, number, special character and minimum 8 characters",
   AGE_NOT_NEGATIVE: "age cannot negative",
-  BOD_MUST_AT_LEAT_YEAR_OLD: "You must be at least 18 years old",
+  INVALID_DATE: "Invalid date",
+  DOB_MUST_AT_LEAT_YEAR_OLD: "You must be at least 18 years old",
   CITY_NAME_ONLY_ALPHABETS: "city must be in alphabet only!",
   STATE_ONLY_ALPHABETS: "state must be in alpahbates only!",
   ZIPCODE_ONLY_DIGITES: "zipcode must be in 5 or 6 digites",
@@ -32,5 +34,6 @@ const MessageConstant = {
   OK_RESPONSE: "OK",
   INVALID_REQUEST: "Invalid request",
   NOT_FOUND: "Not found",
+  ALREADY_EXIST: "Already exists",
 };
 module.exports = MessageConstant;

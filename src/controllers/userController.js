@@ -1,5 +1,5 @@
 // controller req, res, exception
-// call service
+
 const response = require("../helper/generalResponse");
 const MessageConstant = require("../constant/MessageConstant");
 const userService = require("../services/userService");
@@ -47,12 +47,9 @@ class UserController {
   //update the user
   async updateUsers(req, res, next) {
     try {
-      const updateUsers = await userService.updateUsers(
-        req.params.id,
-        req.body,
-      );
+      const updateUser = await userService.updateUsers(req.params.id, req.body);
 
-      return response.updatedResponse(res, updateUsers);
+      return response.updatedResponse(res, updateUser);
     } catch (error) {
       console.log("error: ", error);
       next(error);

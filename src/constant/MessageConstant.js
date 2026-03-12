@@ -5,5 +5,32 @@ const MessageConstant = {
   USER_GET_BY_ID: "get single users by id",
   USER_UPDATE: "user updated",
   USER_DELETE: "user deleted successfully",
+  FIRST_NAME_ONLY_ALPHABETS: "First name must contain only alphabets",
+  MIDDLE_NAME_ONLY_ALPHABETS: "middleName must contain only alphabets",
+  LAST_NAME_ONLY_ALPHABETS: "lastName must contain only alphabets",
+  INVALID_EMAIL_FORMATE: "Invalid email formate",
+  EMAIL_EXISTING: "Email already exists",
+  PASSWORD_ERROR:
+    "Password must contain uppercase, lowercase, number, special character and minimum 8 characters",
+  AGE_NOT_NEGATIVE: "age cannot negative",
+  BOD_MUST_AT_LEAT_YEAR_OLD: "You must be at least 18 years old",
+  CITY_NAME_ONLY_ALPHABETS: "city must be in alphabet only!",
+  STATE_ONLY_ALPHABETS: "state must be in alpahbates only!",
+  ZIPCODE_ONLY_DIGITES: "zipcode must be in 5 or 6 digites",
+  MOBILE_NUMBER_ONLY_10_DIGITES: "Enter Valid moblieNumber of 10 Digites",
+  INVALID_GENDER: "Invalid gender value",
+  INVALID_USERS_STATUS: "Invalid staus value",
+  INVALID_USERS_ROLE: "Invalid role value",
+  VAIDATION_FAILD: "validation failed",
+  SERVER_ERROR: " Internal server error",
+
+  //ERROR MESSAGE
+  ERROR: "ERROR",
+  UNAUTHORIZED_ERROR: "Unauthorized access",
+  BAD_REQUEST_ERROR: "Bad Request",
+  SUCCESS: "SUCCESS",
+  OK_RESPONSE: "OK",
+  INVALID_REQUEST: "Invalid request",
+  NOT_FOUND: "Not found",
 };
 module.exports = MessageConstant;

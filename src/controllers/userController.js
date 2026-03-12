@@ -1,6 +1,6 @@
 // controller req, res, exception
 // call service
-
+const response = require("../helper/generalResponse");
 const MessageConstant = require("../constant/MessageConstant");
 const userService = require("../services/userService");
 
@@ -8,15 +8,15 @@ class UserController {
   //create user
   async createUser(req, res, next) {
     try {
-      const userData = req.body;
-      const newUser = await userService.createUser(userData);
-
-      return res.status(201).json({
-        message: MessageConstant.USER_CREATED,
-        data: newUser,
-      });
+      // call services
+      const result = await userService.createUser(req?.body);
+      return response.createdResponse(
+        res,
+        result,
+        MessageConstant.USER_CREATED,
+      );
     } catch (error) {
-      console.error("Error: ", error);
+      console.log("error: ", error);
       next(error);
     }
   }
@@ -24,67 +24,51 @@ class UserController {
   //get  all users
   async getAllUsers(req, res, next) {
     try {
-      //   const users = await userService.getAllUsers();
-
-      return res.status(200).json({
-        message: MessageConstant.USER_GET,
-      });
+      const users = await userService.getAllUsers();
+      return response.getOkResponse(res, users);
     } catch (error) {
-      console.error("Error :", error);
+      console.log("error: ", error);
       next(error);
     }
   }
 
   //get single user by id
-
   async getUserbyId(req, res, next) {
     try {
-      const { id } = req.params;
-      //   const user = await userService.getUserbyId(id);
+      const users = await userService.getUserbyId(req.params.id);
 
-      return res.status(200).json({
-        message: MessageConstant.USER_GET_BY_ID,
-      });
+      return response.getOkResponse(res, users);
     } catch (error) {
-      console.error("Error : ", error);
+      console.log("error: ", error);
       next(error);
     }
   }
 
   //update the user
-
   async updateUsers(req, res, next) {
     try {
-      const { id } = req.params;
-      const updateData = req.body;
+      const updateUsers = await userService.updateUsers(
+        req.params.id,
+        req.body,
+      );
 
-      const updateUsers = await userService.updateUsers(id, updateData);
-
-      return res.status(201).json({
-        message: MessageConstant.USER_UPDATE,
-        data: updateUsers,
-      });
+      return response.updatedResponse(res, updateUsers);
     } catch (error) {
-      console.error("Error : ", error);
+      console.log("error: ", error);
       next(error);
     }
   }
 
   //delete users
-
   async deleteUsers(req, res, next) {
     try {
-      const { id } = req.params;
-      await userService.deleteUsers(id);
+      const deleteuser = await userService.deleteUsers(req.params.id);
 
-      return res.status(200).json({
-        message: MessageConstant.USER_DELETE,
-      });
+      return response.deletedResponse(res, deleteuser);
     } catch (error) {
-      console.error("Error :", error);
+      console.log("error: ", error);
       next(error);
     }
   }
 }
-
 module.exports = new UserController();

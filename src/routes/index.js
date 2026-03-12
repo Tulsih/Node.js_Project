@@ -3,7 +3,7 @@ const route = express();
 
 const userRoute = require("./userRoute");
 
-//sub routes
+//main routes
 route.use("/users", userRoute);
 
 module.exports = route;

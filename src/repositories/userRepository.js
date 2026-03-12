@@ -25,7 +25,7 @@ const getUserbyId = async (id) => {
 //updated users
 const updateUsers = async (id, upadteData) => {
   const updateUser = await Users.findByIdAndUpdate(id, upadteData, {
-    new: true,
+    returnDocument: "after",
     runValidators: true, //run schema validation before update
   });
   if (!updateUser) {

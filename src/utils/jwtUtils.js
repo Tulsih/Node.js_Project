@@ -7,12 +7,12 @@ const SECRET = process.env.JWT_SECRET;
 
 const generateToken = (payload) => {
   return jwt.sign(payload, SECRET, {
-    expiresIn: "5m",
+    expiresIn: "30m",
   });
 };
 
-// const verifyToken = (token) => {
-//   return jwt.verify(token, SECRET);
-// };
+const verifyToken = (token) => {
+  return jwt.verify(token, SECRET);
+};
 
-module.exports = { generateToken };
+module.exports = { generateToken, verifyToken };

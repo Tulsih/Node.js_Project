@@ -29,7 +29,13 @@ const MessageConstant = {
   INVALID_USERS_ROLE: "Invalid role value",
   VAIDATION_FAILD: "validation failed",
   SERVER_ERROR: " Internal server error",
-
+  INVALID_EMAIL_PASSWORED: "invalid email or passwored",
+  UNAUTHORIZED: "user is unauthorized",
+  ACCESS_DENIED: "Access denied",
+  ACCOUNT_BLOCK: "Account blocked",
+  USER_UNBLOCKED: "User unblocked successfully",
+  TOKEN_NOT_PROVIDED: "Token not provided",
+  INVALID_TOKEN: "invalid token",
   //ERROR MESSAGE
   ERROR: "ERROR",
   UNAUTHORIZED_ERROR: "Unauthorized access",

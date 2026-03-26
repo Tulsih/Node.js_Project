@@ -65,15 +65,29 @@ const UserSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["ACTIVE", "BLOCK", "INACTIVE"],
+      enum: ["ACTIVE", "BLOCKED", "INACTIVE"],
+      default: "ACTIVE",
     },
     roles: {
       type: String,
       enum: ["ADMIN", "USER", "ANONYMOUSE"],
+      default: "USER",
     },
     softDelete: {
       type: Boolean,
       default: false,
+    },
+
+    //Time base unblock user
+    // blockUntil:{
+    //   type:Date,
+    //   default: null,
+    // },
+
+    //login Attempts
+    loginAttempts: {
+      type: Number,
+      default: 0,
     },
   },
   {

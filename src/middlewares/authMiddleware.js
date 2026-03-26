@@ -3,6 +3,7 @@ const MessageConstant = require("../constant/MessageConstant");
 const response = require("../helper/generalResponse");
 require("dotenv").config();
 const { verifyToken } = require("../utils/jwtUtils");
+const { UserRoles } = require("../enum/UserRoles");
 
 //verify Token Middleware
 const authenticate = (req, res, next) => {
@@ -42,7 +43,7 @@ const authenticate = (req, res, next) => {
 
 //check admin role
 const isAdmin = (req, res, next) => {
-  if (req.user.roles !== "ADMIN") {
+  if (req.user.roles !== UserRoles.ADMIN) {
     return response.unAuthorizeResponse(res, MessageConstant.ACCESS_DENIED);
   }
 

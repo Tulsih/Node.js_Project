@@ -53,7 +53,7 @@ class AuthService {
 
       //check max count
       if (user.loginAttempts >= MAX_LOGIN_ATTEMPTS) {
-        user.status = "BLOCKED";
+        user.status = UserStatus.BLOCK;
         // user.blockUntil = new Date(Date.now() + BLOCK_DURATION);
         await user.save();
 

@@ -16,8 +16,6 @@ class EmailService {
       city: user.city,
       state: user.state,
       status: user.status,
-      createdAt: new Date(user.createdAt).toLocaleString(),
-      updatedAt: new Date(user.updatedAt).toLocaleString(),
     };
   }
   async sendBlockEmail(user) {

@@ -2,6 +2,7 @@ const response = require("../helper/generalResponse");
 const MessageConstant = require("../constant/MessageConstant");
 const authService = require("../services/authService");
 const User = require("../models/user");
+const { UserStatus } = require("../enum/UserStatus");
 
 class authController {
   //login user
@@ -28,7 +29,7 @@ class authController {
         return response.notFoundResponse(res, MessageConstant.USER_NOT_FOUND);
       }
 
-      user.status = "ACTIVE";
+      user.status = UserStatus.ACTIVE;
       user.loginAttempts = 0;
 
       await user.save();

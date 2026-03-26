@@ -60,7 +60,7 @@ paths:
                   example: ACTIVE
                 roles:
                   type: array
-                  example: ADMIN
+                  example: USER
       responses:
         201:
           description: user created

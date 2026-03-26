@@ -14,12 +14,10 @@ const {
 const { generateToken } = require("../utils/jwtUtils");
 require("dotenv").config();
 const emailService = require("./emailService");
+const { UserStatus } = require("../enum/UserStatus");
 
 //5 login attemptes
 const MAX_LOGIN_ATTEMPTS = process.env.MAX_LOGIN_ATTEMPTS || 5;
-
-//5 min block duration
-// const BLOCK_DURATION = 5 * 60 * 1000;
 
 class AuthService {
   async login(data) {
@@ -39,21 +37,9 @@ class AuthService {
     }
 
     //chcek if user blaocked
-    if (user.status === "BLOCKED") {
+    if (user.status === UserStatus.BLOCK) {
       throw new AccessDeniedError(MessageConstant.ACCOUNT_BLOCK);
     }
-    //auto unblock after 5 mim of block
-    // if (user.status === "BLOCK") {
-    //   if (user.blockUntil && new Date() > user.blockUntil) {
-    //     //auto unblock
-    //     user.status = "ACTIVE";
-    //     user.loginAttempts = 0;
-    //     user.blockUntil = null;
-    //     await user.save();
-    //   } else {
-    //     throw new AccessDeniedError(MessageConstant.ACCOUNT_BLOCK);
-    //   }
-    // }
 
     //verify the password using bcrypt
     const ispasswordValid = await bcrypt.compare(password, user.password);
@@ -89,8 +75,6 @@ class AuthService {
     const payload = {
       userId: user._id,
       roles: user.roles,
-      // email: user.email,
-      // status: user.status,
     };
 
     //Genrate JWT Tokens

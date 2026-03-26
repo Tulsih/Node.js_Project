@@ -2,6 +2,9 @@
 //user schema
 const mongoose = require("mongoose");
 const { string } = require("zod");
+const { listUserStatus, UserStatus } = require("../enum/UserStatus");
+const { listUserRoles, UserRoles } = require("../enum/UserRoles");
+const { listUserGender } = require("../enum/UserGender");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -45,7 +48,7 @@ const UserSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: ["MALE", "FEMALE"],
+      enum: listUserGender,
       required: true,
     },
     dateOfBirth: {
@@ -65,13 +68,13 @@ const UserSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["ACTIVE", "BLOCKED", "INACTIVE"],
-      default: "ACTIVE",
+      enum: listUserStatus,
+      default: UserStatus.ACTIVE,
     },
     roles: {
       type: String,
-      enum: ["ADMIN", "USER", "ANONYMOUSE"],
-      default: "USER",
+      enum: listUserRoles,
+      default: UserRoles.USER,
     },
     softDelete: {
       type: Boolean,

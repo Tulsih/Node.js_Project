@@ -36,7 +36,10 @@ const MessageConstant = {
   USER_UNBLOCKED: "User unblocked successfully",
   TOKEN_NOT_PROVIDED: "Token not provided",
   INVALID_TOKEN: "invalid token",
-  OTP_SENT: "otp send in ypur email",
+  OTP_SENT: "otp send in your email",
+  OTP_NOT_FOUND: "opt not found",
+  OTP_EXPIRED: "otp expired",
+  INVALID_OTP: "invalid otp",
 
   //ERROR MESSAGE
   ERROR: "ERROR",

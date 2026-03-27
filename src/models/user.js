@@ -81,16 +81,18 @@ const UserSchema = new mongoose.Schema(
       default: false,
     },
 
-    //Time base unblock user
-    // blockUntil:{
-    //   type:Date,
-    //   default: null,
-    // },
-
     //login Attempts
     loginAttempts: {
       type: Number,
       default: 0,
+    },
+
+    otp: {
+      type: string,
+    },
+
+    otpExpires: {
+      type: Date,
     },
   },
   {

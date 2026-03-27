@@ -60,9 +60,15 @@ class EmailService {
   }
 
   //otp send email
-  async sendOtpEmail(email, otp) {
+  async sendOtpEmail(user, otp) {
     try {
-      const transporter = this.createTransport();
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
 
       await transporter.verify();
 
@@ -81,15 +87,15 @@ class EmailService {
       const html = Mustache.render(template, data);
 
       await transporter.sendMail({
-        form: process.env.EMAIL_USER,
+        from: process.env.EMAIL_USER,
         to: user.email,
         subject: "Your OTP code",
         html: html,
       });
 
       console.log("OTP email sent succesfuly");
-    } catch (erro) {
-      console.log("otp email error:", error.message);
+    } catch (error) {
+      console.log("otp email error:", error);
     }
   }
 }

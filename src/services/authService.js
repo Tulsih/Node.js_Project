@@ -20,6 +20,7 @@ const { UserStatus } = require("../enum/UserStatus");
 const MAX_LOGIN_ATTEMPTS = process.env.MAX_LOGIN_ATTEMPTS || 5;
 
 class AuthService {
+  //login send otp
   async login(data) {
     //validation email & passwored login
     const validation = await validate(loginSchema, data);
@@ -65,11 +66,63 @@ class AuthService {
       throw new UnauthorizedException(MessageConstant.INVALID_EMAIL_PASSWORED);
     }
 
-    //reset attemptes after successfully login
+    //correct password
     user.loginAttempts = 0;
-    //user.blockUntil = null;
+
+    //generate otp 6 number
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+    //hased otp
+    const hashedOtp = await bcrypt.hash(otp, 10);
+
+    //expiry time
+    const otpExpireMinutes = process.env.OTP_EXPIRE_MINUTES;
+    const otpExpiryTime = new Date(Date.now() + otpExpireMinutes * 60 * 1000);
+
+    //save otp
+    user.otp = hashedOtp;
+    user.otpExpires = otpExpiryTime;
+
     await user.save();
-    console.log("login success , attemptes reset");
+
+    //send otp email
+    await emailService.sendOtpEmail(user, otp);
+
+    return {
+      message: MessageConstant.OTP_SENT,
+    };
+  }
+
+  //verify opt
+  async verifyOtp(data) {
+    const { email, otp } = data;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      throw new NotFoundException(MessageConstant.USER_NOT_FOUND);
+    }
+    if (!user.otp || !user.otpExpires) {
+      throw new InvalidRequestException(MessageConstant.OTP_NOT_FOUND);
+    }
+
+    //check expiry
+    if (Date.now() > user.otpExpires) {
+      throw new InvalidRequestException(MessageConstant.OTP_EXPIRED);
+    }
+
+    //compre otp
+    const isOtpValid = await bcrypt.compare(otp, user.otp);
+
+    if (!isOtpValid) {
+      throw new unAuthorizeResponse(MessageConstant.INVALID_OTP);
+    }
+
+    //clear otp after success
+    user.otp = null;
+    user.otpExpires = null;
+
+    await user.save();
 
     //JWT payload
     const payload = {

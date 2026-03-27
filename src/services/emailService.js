@@ -3,6 +3,8 @@ require("dotenv").config();
 const Mustache = require("mustache");
 const fs = require("fs");
 const path = require("path");
+const { error } = require("console");
+const user = require("../models/user");
 
 class EmailService {
   //retun value to send user
@@ -54,6 +56,40 @@ class EmailService {
       console.log("block email send successfully");
     } catch (error) {
       console.log("Email Error:", error.message);
+    }
+  }
+
+  //otp send email
+  async sendOtpEmail(email, otp) {
+    try {
+      const transporter = this.createTransport();
+
+      await transporter.verify();
+
+      //load template
+      const templatePath = path.join(__dirname, "../templates/otp.mustache");
+
+      const template = fs.readFileSync(templatePath, "utf-8");
+
+      //data for template
+      const data = {
+        name: user.firstName,
+        otp: otp,
+        expiry: process.env.OTP_EXPIRE_MINUTES,
+      };
+
+      const html = Mustache.render(template, data);
+
+      await transporter.sendMail({
+        form: process.env.EMAIL_USER,
+        to: user.email,
+        subject: "Your OTP code",
+        html: html,
+      });
+
+      console.log("OTP email sent succesfuly");
+    } catch (erro) {
+      console.log("otp email error:", error.message);
     }
   }
 }

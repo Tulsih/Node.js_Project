@@ -11,14 +11,26 @@ class authController {
       //call auth services
       const result = await authService.login(req.body);
       console.log(authService);
-      return response.getOkResponse(res, result, MessageConstant.LOGIN_SUCCESS);
+      return response.getOkResponse(res, result, MessageConstant.OTP_SENT);
     } catch (error) {
       console.log("error:", error);
       next(error);
     }
   }
-  //admin unblocks a user
 
+  //verify otp api
+  async verifyOtp(req, res, next) {
+    try {
+      //call verifyOtp services
+      const result = await authService.verifyOtp(req.body);
+
+      return response.getOkResponse(res, result, MessageConstant.LOGIN_SUCCESS);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  //admin unblocks a user
   async unblockUser(req, res, next) {
     try {
       const userId = req.params.id;

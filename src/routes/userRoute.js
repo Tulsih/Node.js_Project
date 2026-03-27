@@ -11,6 +11,7 @@ const { authenticate, isAdmin } = require("../middlewares/authMiddleware");
 
 route.post("/", userController.createUser);
 route.post("/login", authController.login);
+route.post("/verfy-otp", authController.verifyOtp);
 
 route.patch("/:id/unblock", authenticate, isAdmin, authController.unblockUser);
 route.get("/list", userController.getAllUsers);

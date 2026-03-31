@@ -40,6 +40,8 @@ const MessageConstant = {
   OTP_NOT_FOUND: "opt not found",
   OTP_EXPIRED: "otp expired",
   INVALID_OTP: "invalid otp",
+  INVALID_ACCEES_TYPE: "Invalid access type",
+  ADMIN_LOGIN_SUCCESS: "admin login succcessfully",
 
   //ERROR MESSAGE
   ERROR: "ERROR",

@@ -11,10 +11,13 @@ const {
   UnauthorizedException,
   AccessDeniedError,
 } = require("../exceptions/ApiError");
-const { generateToken } = require("../utils/jwtUtils");
+const { generateToken, verifyToken } = require("../utils/jwtUtils");
 require("dotenv").config();
 const emailService = require("./emailService");
 const { UserStatus } = require("../enum/UserStatus");
+const { verify } = require("jsonwebtoken");
+const { AccessType } = require("../enum/AccessType");
+const { UserRoles } = require("../enum/UserRoles");
 
 //5 login attemptes
 const MAX_LOGIN_ATTEMPTS = process.env.MAX_LOGIN_ATTEMPTS || 5;
@@ -55,7 +58,7 @@ class AuthService {
       //check max count
       if (user.loginAttempts >= MAX_LOGIN_ATTEMPTS) {
         user.status = UserStatus.BLOCK;
-        // user.blockUntil = new Date(Date.now() + BLOCK_DURATION);
+
         await user.save();
 
         //call email services
@@ -68,6 +71,24 @@ class AuthService {
 
     //correct password
     user.loginAttempts = 0;
+
+    //admin bypass otp
+    if (user.roles === UserRoles.ADMIN) {
+      const payload = {
+        userId: user._id,
+        roles: user.roles,
+        accessType: AccessType.LOGIN,
+      };
+
+      const token = generateToken(payload);
+
+      return {
+        userId: user._id,
+        email: user.email,
+        roles: user.roles,
+        token,
+      };
+    }
 
     //generate otp 6 number
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -88,25 +109,52 @@ class AuthService {
     //send otp email
     await emailService.sendOtpEmail(user, otp);
 
+    //genrate tempjwt
+    const tempToken = generateToken(
+      {
+        userId: user._id,
+        roles: user.roles,
+        accessType: AccessType.VERIFY_OTP,
+      },
+      process.env.TEMP_JWT_EXPIRES_IN,
+    );
+
     return {
       message: MessageConstant.OTP_SENT,
+      tempToken,
     };
   }
 
-  //verify opt
+  //verify opt api
   async verifyOtp(data) {
-    const { email, otp } = data;
+    const { email, otp, tempToken } = data;
 
+    //verify temp token First
+    let decoded;
+    try {
+      decoded = verifyToken(tempToken);
+    } catch (error) {
+      throw new UnauthorizedException(MessageConstant.INVALID_TOKEN);
+    }
+
+    //find user
     const user = await User.findOne({ email });
 
     if (!user) {
       throw new NotFoundException(MessageConstant.USER_NOT_FOUND);
     }
+
+    //match  user
+    if (decoded.userId.toString() !== user._id.toString()) {
+      throw new UnauthorizedException(MessageConstant.INVALID_TOKEN);
+    }
+
+    //normal user otp required
     if (!user.otp || !user.otpExpires) {
       throw new InvalidRequestException(MessageConstant.OTP_NOT_FOUND);
     }
 
-    //check expiry
+    //check expiry time
     if (Date.now() > user.otpExpires) {
       throw new InvalidRequestException(MessageConstant.OTP_EXPIRED);
     }
@@ -128,6 +176,7 @@ class AuthService {
     const payload = {
       userId: user._id,
       roles: user.roles,
+      accessType: AccessType.LOGIN,
     };
 
     //Genrate JWT Tokens

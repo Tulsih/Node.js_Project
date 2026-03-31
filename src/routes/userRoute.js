@@ -11,10 +11,11 @@ const { authenticate, isAdmin } = require("../middlewares/authMiddleware");
 
 route.post("/", userController.createUser);
 route.post("/login", authController.login);
-route.post("/verfy-otp", authController.verifyOtp);
+route.post("/verify-otp", authenticate, authController.verifyOtp);
 
 route.patch("/:id/unblock", authenticate, isAdmin, authController.unblockUser);
-route.get("/list", userController.getAllUsers);
+
+route.get("/list", authenticate, userController.getAllUsers);
 
 route.get("/:id", userController.getUserbyId);
 route.put("/:id", userController.updateUsers);

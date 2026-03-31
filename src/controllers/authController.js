@@ -3,6 +3,7 @@ const MessageConstant = require("../constant/MessageConstant");
 const authService = require("../services/authService");
 const User = require("../models/user");
 const { UserStatus } = require("../enum/UserStatus");
+const { UserRoles } = require("../enum/UserRoles");
 
 class authController {
   //login user
@@ -11,6 +12,17 @@ class authController {
       //call auth services
       const result = await authService.login(req.body);
       console.log(authService);
+
+      //if admin login
+      if (result.roles === UserRoles.ADMIN) {
+        return response.getOkResponse(
+          res,
+          result,
+          MessageConstant.ADMIN_LOGIN_SUCCESS,
+        );
+      }
+
+      //normal user
       return response.getOkResponse(res, result, MessageConstant.OTP_SENT);
     } catch (error) {
       console.log("error:", error);

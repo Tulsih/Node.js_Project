@@ -234,15 +234,20 @@ paths:
           application/json:
             schema:
               type: object
-              required: -email
-                -otp
+              required:
+                - email
+                - otp
+                - tempToken
               properties:
                 email:
                   type: string
                   example: adb123@gamil.com
                 otp:
                   type: string
-                  example: 123456
+                  example:
+                tempToken:
+                  type: string
+                  example: jwt-temp-token
       responses:
         200:
           description: Login successfully

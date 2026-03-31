@@ -4,15 +4,18 @@ const response = require("../helper/generalResponse");
 require("dotenv").config();
 const { verifyToken } = require("../utils/jwtUtils");
 const { UserRoles } = require("../enum/UserRoles");
+const { decode } = require("../validation/loginValidation");
+const { AccessType } = require("../enum/AccessType");
+const { UnauthorizedException } = require("../exceptions/ApiError");
 
 //verify Token Middleware
 const authenticate = (req, res, next) => {
   try {
     //get authorization token form postmam
-    const authHeader = req.headers.authorization;
+    const authHeader = req.headers?.authorization;
 
     if (!authHeader) {
-      console.log("error", error);
+      console.log("Authorization header missing", error);
       return response.unAuthorizeResponse(
         res,
         MessageConstant.TOKEN_NOT_PROVIDED,
@@ -31,9 +34,12 @@ const authenticate = (req, res, next) => {
     //verify token
     const decoded = verifyToken(token);
     console.log("decoded token ", decoded);
-    //decoded ={userid , roles}
-    req.user = decoded;
 
+    //check accessType
+    if (decoded.accessType !== AccessType.LOGIN) {
+      throw new UnauthorizedException(MessageConstant.INVALID_ACCEES_TYPE);
+    }
+    req.user = decoded;
     next();
   } catch (error) {
     console.log("jwt verificatio error", error.message);

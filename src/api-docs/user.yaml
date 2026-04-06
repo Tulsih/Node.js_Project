@@ -237,7 +237,6 @@ paths:
               required:
                 - email
                 - otp
-                - tempToken
               properties:
                 email:
                   type: string
@@ -245,9 +244,6 @@ paths:
                 otp:
                   type: string
                   example:
-                tempToken:
-                  type: string
-                  example: jwt-temp-token
       responses:
         200:
           description: Login successfully

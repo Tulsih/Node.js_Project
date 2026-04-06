@@ -126,8 +126,8 @@ class AuthService {
   }
 
   //verify opt api
-  async verifyOtp(data) {
-    const { email, otp, tempToken } = data;
+  async verifyOtp(data, tempToken) {
+    const { email, otp } = data;
 
     //verify temp token First
     let decoded;

@@ -15,7 +15,7 @@ const authenticate = (req, res, next) => {
     const authHeader = req.headers?.authorization;
 
     if (!authHeader) {
-      console.log("Authorization header missing", error);
+      console.log("Authorization header missing");
       return response.unAuthorizeResponse(
         res,
         MessageConstant.TOKEN_NOT_PROVIDED,
@@ -47,6 +47,40 @@ const authenticate = (req, res, next) => {
   }
 };
 
+const verifyTempToken = (req, res, next) => {
+  try {
+    const authHeader = req.headers?.authorization;
+
+    if (!authHeader) {
+      return response.unAuthorizeResponse(
+        res,
+        MessageConstant.TOKEN_NOT_PROVIDED,
+      );
+    }
+
+    const parts = authHeader.split(" ");
+    if (parts.length !== 2 || parts[0] !== "Bearer") {
+      console.log("invalid token format ", authHeader);
+      return response.unAuthorizeResponse(res, MessageConstant.INVALID_TOKEN);
+    }
+    const token = parts[1];
+    console.log("extracted token ", token);
+
+    const decode = verifyToken(token);
+    console.log("decoded token ", decode);
+
+    if (decode.accessType !== AccessType.VERIFY_OTP) {
+      throw new UnauthorizedException(MessageConstant.INVALID_ACCEES_TYPE);
+    }
+
+    req.tempToken = token;
+    req.tempUser = decode;
+    next();
+  } catch (error) {
+    return response.unAuthorizeResponse(res, MessageConstant.UNAUTHORIZED);
+  }
+};
+
 //check admin role
 const isAdmin = (req, res, next) => {
   if (req.user.roles !== UserRoles.ADMIN) {
@@ -55,4 +89,4 @@ const isAdmin = (req, res, next) => {
 
   next();
 };
-module.exports = { authenticate, isAdmin };
+module.exports = { authenticate, isAdmin, verifyTempToken };

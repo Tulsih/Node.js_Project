@@ -34,7 +34,7 @@ class authController {
   async verifyOtp(req, res, next) {
     try {
       //call verifyOtp services
-      const result = await authService.verifyOtp(req.body);
+      const result = await authService.verifyOtp(req.body, req.tempToken);
 
       return response.getOkResponse(res, result, MessageConstant.LOGIN_SUCCESS);
     } catch (error) {

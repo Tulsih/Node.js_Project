@@ -7,11 +7,15 @@ const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 //define routes
 //middleware
-const { authenticate, isAdmin } = require("../middlewares/authMiddleware");
+const {
+  authenticate,
+  verifyTempToken,
+  isAdmin,
+} = require("../middlewares/authMiddleware");
 
 route.post("/", userController.createUser);
 route.post("/login", authController.login);
-route.post("/verify-otp", authenticate, authController.verifyOtp);
+route.post("/verify-otp", verifyTempToken, authController.verifyOtp);
 
 route.patch("/:id/unblock", authenticate, isAdmin, authController.unblockUser);
 

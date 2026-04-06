@@ -35,7 +35,7 @@ class EmailService {
       //load mustache template
       const templatePath = path.join(
         __dirname,
-        "../templates/accountBlocked.mustache",
+        "../templates/accountBlocked.html",
       );
       const template = fs.readFileSync(templatePath, "utf-8");
 
@@ -73,7 +73,7 @@ class EmailService {
       await transporter.verify();
 
       //load template
-      const templatePath = path.join(__dirname, "../templates/otp.mustache");
+      const templatePath = path.join(__dirname, "../templates/otp.html");
 
       const template = fs.readFileSync(templatePath, "utf-8");
 

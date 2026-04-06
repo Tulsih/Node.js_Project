@@ -47,6 +47,7 @@ const authenticate = (req, res, next) => {
   }
 };
 
+//temp token verify
 const verifyTempToken = (req, res, next) => {
   try {
     const authHeader = req.headers?.authorization;

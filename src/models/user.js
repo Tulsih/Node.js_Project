@@ -2,6 +2,9 @@
 //user schema
 const mongoose = require("mongoose");
 const { string } = require("zod");
+const { listUserStatus, UserStatus } = require("../enum/UserStatus");
+const { listUserRoles, UserRoles } = require("../enum/UserRoles");
+const { listUserGender } = require("../enum/UserGender");
 
 const UserSchema = new mongoose.Schema(
   {
@@ -45,7 +48,7 @@ const UserSchema = new mongoose.Schema(
     },
     gender: {
       type: String,
-      enum: ["MALE", "FEMALE"],
+      enum: listUserGender,
       required: true,
     },
     dateOfBirth: {
@@ -65,15 +68,31 @@ const UserSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["ACTIVE", "BLOCK", "INACTIVE"],
+      enum: listUserStatus,
+      default: UserStatus.ACTIVE,
     },
     roles: {
       type: String,
-      enum: ["ADMIN", "USER", "ANONYMOUSE"],
+      enum: listUserRoles,
+      default: UserRoles.USER,
     },
     softDelete: {
       type: Boolean,
       default: false,
+    },
+
+    //login Attempts
+    loginAttempts: {
+      type: Number,
+      default: 0,
+    },
+
+    otp: {
+      type: string,
+    },
+
+    otpExpires: {
+      type: Date,
     },
   },
   {

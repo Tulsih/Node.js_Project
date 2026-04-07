@@ -5,6 +5,6 @@ const UserRoles = {
   USER: "USER",
   ANONYMOUS: "ANONYMOUS",
 };
-const listUserRoles = Object.keys(UserRoles);
+const listUserRoles = Object.values(UserRoles);
 
 module.exports = { UserRoles, listUserRoles };

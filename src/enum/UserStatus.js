@@ -1,8 +1,8 @@
 const UserStatus = {
   ACTIVE: "ACTIVE",
   INACTIVE: "INACTIVE",
-  BLOCK: "BLOCK",
+  BLOCK: "BLOCKED",
 };
-const listUserStatus = Object.keys(UserStatus);
+const listUserStatus = Object.values(UserStatus);
 
 module.exports = { UserStatus, listUserStatus };

@@ -4,6 +4,6 @@ const UserGender = {
   MALE: "MALE",
   FEMALE: "FEMALE",
 };
-const listUserGender = Object.keys(UserGender);
+const listUserGender = Object.values(UserGender);
 
 module.exports = { UserGender, listUserGender };

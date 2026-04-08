@@ -8,6 +8,21 @@ const options = {
       version: "1.0.0",
       description: "API documentation using Swagger",
     },
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    //applies authentication to ALL endpoints by default
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
   apis: ["./src/api-docs/*.yaml"], // swagger routes file
 };

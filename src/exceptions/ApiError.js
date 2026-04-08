@@ -27,8 +27,22 @@ class AlredayExistsException extends AppError {
     super(409, message);
   }
 }
+
+class UnauthorizedException extends AppError {
+  constructor(message = MessageConstant.UNAUTHORIZED) {
+    super(401, message);
+  }
+}
+
+class AccessDeniedError extends AppError {
+  constructor(message = MessageConstant.ACCESS_DENIED) {
+    super(403, message);
+  }
+}
 module.exports = {
   InvalidRequestException,
   NotFoundException,
   AlredayExistsException,
+  UnauthorizedException,
+  AccessDeniedError,
 };
